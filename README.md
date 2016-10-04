@@ -1,5 +1,9 @@
 # HSR PLACE ON
 
+## ROS Installation
+
+[ROS.org](http://wiki.ros.org/)
+
 ## Getting Started
 
 First, clone this repository.

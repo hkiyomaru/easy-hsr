@@ -1,15 +1,15 @@
 #!usr/bin/env python
 import roslib
 import rospy
-import trajectory_msgs.msg
+import geometry_msgs.msg
 import controller_manager_msgs.srv
 
 import sys
 
 
-class Move():
+class MoveManager():
     def __init__(self):
-        self.pub = rospy.Publisher('/hsrb/omni_base_controller/command', trajectory_msgs.msg.JointTrajectory, queue_size=10)
+        self.pub = rospy.Publisher('/hsrb/command_velocity', geometry_msgs.msg.Twist, queue_size=10)
         self.establish_connection()
 
     def __call__(self, destination, relation='relative'):
@@ -23,14 +23,14 @@ class Move():
             sys.exit(1)
 
     def move_relatively(self, destination):
-        traj = trajectory_msgs.msg.JointTrajectory()
-        traj.joint_names = ["odom_x", "odom_y", "odom_t"]
-        p = trajectory_msgs.msg.JointTrajectoryPoint()
-        p.positions = destination["positions"]
-        p.velocities = destination["velocities"]
-        p.time_from_start = rospy.Time(6)
-        traj.points = [p]
-        self.pub.publish(traj)
+        twist = geometry_msgs.msg.Twist()
+        twist.linear.x = destination["linear"]["x"]
+        twist.linear.y = destination["linear"]["y"]
+        twist.linear.z = destination["linear"]["z"]
+        twist.angular.x = destination["angular"]["x"]
+        twist.angular.y = destination["angular"]["y"]
+        twist.angular.z = destination["angular"]["z"]
+        self.pub.publish(twist)
 
     def move_absolutely(self, destination):
         pass
@@ -46,15 +46,24 @@ class Move():
             for c in list_controllers().controller:
                 if c.name == 'omni_base_controller' and c.state == 'running':
                     running = True
+        print "Connection of omni_base_controller established."
 
 
 def main():
     rospy.init_node('move_test')
     destination = {
-        "positions": [1, 0, 0],
-        "velocities": [0, 0, 0]
+        "linear": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0,
+        },
+        "angular": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+        }
     }
-    move = Move()(destination=destination)
+    move = MoveManager()(destination=destination)
     return 0
 
 

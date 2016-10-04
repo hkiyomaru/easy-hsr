@@ -10,10 +10,11 @@ import sys
 class MoveManager():
     def __init__(self):
         self.pub = rospy.Publisher('/hsrb/command_velocity', geometry_msgs.msg.Twist, queue_size=10)
+        self.running = False
         self.establish_connection()
 
+
     def __call__(self, destination, relation='relative'):
-        # Move to the destination
         if relation is 'relative':
             self.move_relatively(destination)
         elif relation is 'absolute':
@@ -40,13 +41,14 @@ class MoveManager():
             rospy.sleep(0.1)
         rospy.wait_for_service('/hsrb/controller_manager/list_controllers')
         list_controllers = rospy.ServiceProxy('/hsrb/controller_manager/list_controllers', controller_manager_msgs.srv.ListControllers)
-        running = False
         while running == False and not rospy.is_shutdown():
             rospy.sleep(0.1)
             for c in list_controllers().controller:
                 if c.name == 'omni_base_controller' and c.state == 'running':
-                    running = True
-        print "Connection of omni_base_controller established."
+                    self.running = True
+
+    def isRunning(self):
+        return self.running
 
 
 def main():

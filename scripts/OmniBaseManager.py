@@ -7,14 +7,13 @@ import controller_manager_msgs.srv
 import sys
 
 
-class MoveManager():
+class OmniBaseManager():
     def __init__(self):
         self.pub = rospy.Publisher('/hsrb/command_velocity', geometry_msgs.msg.Twist, queue_size=10)
         self.running = False
         self.establish_connection()
 
-
-    def __call__(self, destination, relation='relative'):
+    def goto(self, destination, relation='relative'):
         if relation is 'relative':
             self.move_relatively(destination)
         elif relation is 'absolute':
@@ -41,7 +40,7 @@ class MoveManager():
             rospy.sleep(0.1)
         rospy.wait_for_service('/hsrb/controller_manager/list_controllers')
         list_controllers = rospy.ServiceProxy('/hsrb/controller_manager/list_controllers', controller_manager_msgs.srv.ListControllers)
-        while running == False and not rospy.is_shutdown():
+        while self.running == False and not rospy.is_shutdown():
             rospy.sleep(0.1)
             for c in list_controllers().controller:
                 if c.name == 'omni_base_controller' and c.state == 'running':
@@ -65,7 +64,8 @@ def main():
             "z": 0.0,
         }
     }
-    move = MoveManager()(destination=destination)
+    omni_base_manager = OmniBaseManager()
+    omni_base_manager.goto(destination=destination)
     return 0
 
 

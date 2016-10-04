@@ -2,7 +2,7 @@
 import sys
 
 
-class Find():
+class DetectARMarkerManager():
     def __init__(self):
         pass
 

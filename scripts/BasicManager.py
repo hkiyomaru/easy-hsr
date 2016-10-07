@@ -10,6 +10,18 @@ class BasicManager(object):
         self.detector = self.robot.get('marker', self.robot.Items.OBJECT_DETECTION)
         self.tts = self.robot.try_get('default', ItemTypes.TEXT_TO_SPEECH)
 
+    def current_position(self, management_joint):
+        return self.whole_body.joint_positions[management_joint]
+
+    def limits_of_position(self, management_joint):
+        return self.whole_body.joint_limits[management_joint]
+
+    def neutral(self):
+        self.whole_body.move_to_neutral()
+
+    def ready_to_go(self):
+        self.whole_body.move_to_go()
+
 if __name__ == '__main__':
     basic_manager = BasicManager()
     basic_manager.omni_base.go(1.0,0,0,10.0)

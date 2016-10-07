@@ -1,7 +1,7 @@
 import hsrb_interface
 from hsrb_interface import ItemTypes
 
-class BasicManager:
+class BasicManager(object):
     def __init__(self):
         self.robot = hsrb_interface.Robot()
         self.omni_base = self.robot.get('omni_base')
@@ -12,3 +12,4 @@ class BasicManager:
 
 if __name__ == '__main__':
     basic_manager = BasicManager()
+    basic_manager.omni_base.go(1.0,0,0,10.0)

@@ -10,17 +10,21 @@ class OmniBaseManager(BasicManager):
         super(OmniBaseManager, self).__init__()
 
     def move_forward(self, distance=0.5, timeout=20.0):
+        self.ready_to_go()
         self.omni_base.go(distance, 0.0, 0.0, timeout, relative=True)
 
     def move_backward(self, distance=0.5, timeout=20.0):
+        self.ready_to_go()
         self.omni_base.go(-distance, 0.0, 0.0, timeout, relative=True)
 
     def turn_right(self, angle=90, timeout=20.0):
         angle = math.radians(angle)
+        self.ready_to_go()
         self.omni_base.go(0.0, 0.0, -angle, timeout, relative=True)
 
     def turn_left(self, angle=90, timeout=20.0):
         angle = math.radians(angle)
+        self.ready_to_go()
         self.omni_base.go(0.0, 0.0, angle, timeout, relative=True)
 
 

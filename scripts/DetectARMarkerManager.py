@@ -1,14 +1,25 @@
 #!usr/bin/env python
 import sys
 
+from BasicManager import BasicManager
 
-class DetectARMarkerManager():
+
+_BOTTLE_TF='ar_marker/503'
+
+
+class DetectARMarkerManager(BasicManager):
     def __init__(self):
-        pass
+        super(DetectARMarkerManager, self).__init__()
 
-    def __call__(self, object):
-        # Find the object
-        return 0
+    def find_ar_marker(self):
+        objects = self.detector.get_objects()
+        return objects
+
+def main():
+    detect_ar_marler_manager = DetectARMarkerManager()
+    print detect_ar_marler_manager.find_ar_marker()
+    return 0
+
 
 if __name__ == '__main__':
-    sys.exit(Find()())
+    sys.exit(main())

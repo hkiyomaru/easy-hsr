@@ -11,7 +11,7 @@ First, clone this repository.
 ```
 $ cd ~/catkin_ws/src/
 
-$ git clone https://github.com/kiyomaro927/hsr_place_on.git
+$ git clone https://github.com/kiyomaro927/easy_hsr.git
 ```
 
 ## Build
